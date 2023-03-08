@@ -49,6 +49,7 @@ public class DriveToPoseCommand extends CommandBase {
 
   @Override
   public void initialize() {
+    System.out.println("DTP: Init");
     var robotPose = poseProvider.get();
     thetaController.reset(robotPose.getRotation().getRadians());
     xController.reset(robotPose.getX());
@@ -96,6 +97,7 @@ public class DriveToPoseCommand extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
+    System.out.println("DTP: End");
     drivetrainSubsystem.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
   }
 
