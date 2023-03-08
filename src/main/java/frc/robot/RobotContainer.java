@@ -5,10 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
-
-// import org.apache.commons.lang3.Conversion;
-
-// import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -22,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-// import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -143,6 +138,7 @@ public class RobotContainer {
         // new JoystickButton(m_controller, 11).whileTrue(new DriveToPoseCommand(m_drivetrainSubsystem,
         //         poseEstimator, poseEstimator.getCurrentPose().transformBy(
         //                 new Transform2d(new Translation2d(1., 0.), new Rotation2d()))));
+
         // new JoystickButton(m_controller, 5)
         //     .whileTrue(new DriveToPoseCommand(m_drivetrainSubsystem, poseEstimator, 
         //         new Pose2d(14.15, 1.07, Rotation2d.fromDegrees(-5.97))));
@@ -158,7 +154,9 @@ public class RobotContainer {
         // new JoystickButton(m_controller, 8)
         //     .whileTrue(new DriveToPoseCommand(m_drivetrainSubsystem, poseEstimator, 
         //         new Pose2d(12.65, 2.46, Rotation2d.fromDegrees(-180.00))));     
-            
+
+        new JoystickButton(m_controller, 5).whileTrue(new AlignToCubeChannelCommand(m_drivetrainSubsystem, poseEstimator));
+
         // controller.rightTrigger().whileTrue(new DriveToPoseCommand(
         //     drivetrainSubsystem, poseEstimator::getCurrentPose, new Pose2d(14.59, 1.67, Rotation2d.fromDegrees(0.0)))
         //         .andThen(new JustShootCommand(0.4064, 1.05, 34.5, elevatorSubsystem, wristSubsystem, shooterSubsystem)));
