@@ -30,7 +30,7 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
 
-    private static final double center_DriverOverRamp_inches = 220.0;
+    private static final double center_DriverOverRamp_inches = 250.0;
     private static final double center_DriveToRamp_inches = 80.0;
     private static final double left_StrafeToRamp = -70.0;
     private static final double right_StrafeToRamp = -left_StrafeToRamp;
@@ -113,8 +113,6 @@ public class RobotContainer {
         m_chooser.addOption("Center: Drive Out + Charge",
                 EjectCubeCommand()
                 .andThen(GoToInches_ExitOnRoll(center_DriveToRamp_inches, 0.0))
-                // Split move into two to avoid doing it too fast
-                // .andThen(GoToInches(center_DriverOverRamp_inches * 0.65, 0.0))
                 .andThen(GoToInches(center_DriverOverRamp_inches, 0.0))
                 .andThen(GoToInches_ExitOnRoll(center_DriveToRamp_inches, 0.0))
                 .andThen(new AutoBalanceCommand(m_drivetrainSubsystem)));
