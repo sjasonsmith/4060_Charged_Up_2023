@@ -253,11 +253,12 @@ public class RobotContainer {
 
         new JoystickButton(m_controller, 7)
             .onTrue(Commands.runOnce(m_wristSubsystem::deploy, m_wristSubsystem)
-                .andThen(Commands.waitSeconds(1.75))
+                .andThen(Commands.waitSeconds(0.75))
                 .andThen(Commands.runOnce(m_wristSubsystem::feedOut, m_wristSubsystem))
-                .andThen(Commands.waitSeconds(1.0))
-                .andThen(Commands.runOnce(m_wristSubsystem::stopRoller, m_wristSubsystem))
-                .andThen(Commands.runOnce(m_wristSubsystem::park, m_wristSubsystem)));
+                .andThen(Commands.waitSeconds(0.5))
+                .andThen(Commands.runOnce(m_wristSubsystem::park, m_wristSubsystem))
+                .andThen(Commands.waitSeconds(0.5))
+                .andThen(Commands.runOnce(m_wristSubsystem::stopRoller, m_wristSubsystem)));
     }
 
     /**s
