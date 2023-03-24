@@ -93,6 +93,7 @@ public class WristSubsystem extends SubsystemBase {
 
     // Add function called park that sets wrist position to 10 degrees
     public void park() {
+        stopRoller();
         setWristPosition(Constants.WRIST_PARK_POS);
         roller_speed_current = roller_speed_deployed();
     }
