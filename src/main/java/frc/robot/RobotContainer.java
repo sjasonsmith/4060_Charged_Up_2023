@@ -158,11 +158,11 @@ public class RobotContainer {
 
         DefaultDriveCommand robotRelativeDriveCommand = new DefaultDriveCommand(m_drivetrainSubsystem,
                 false,
-                () -> modifyAxis(-m_controller.getRawAxis(1))
+                () -> modifyAxis(-m_controller2.getRawAxis(1))
                         * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-                () -> -modifyAxis(m_controller.getRawAxis(0))
+                () -> -modifyAxis(m_controller2.getRawAxis(0))
                         * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-                () -> -modifyTwistAxis(m_controller.getTwist())
+                () -> -modifyTwistAxis(m_controller2.getTwist())
                         * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * m_drivetrainSubsystem.RotationLock * MAX_JOYSTICK_TWIST);
 
         new JoystickButton(m_controller, 1).whileTrue(
