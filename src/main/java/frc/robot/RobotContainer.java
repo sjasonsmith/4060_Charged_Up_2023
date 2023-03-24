@@ -41,6 +41,8 @@ public class RobotContainer {
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
 
     private final Joystick m_controller = new Joystick(0);
+    private final Joystick m_controller2 = new Joystick(1);
+
     private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(m_drivetrainSubsystem);
 
     private final CubeFlipperSubsystem m_cubeFlipperSubsystem = new CubeFlipperSubsystem();
@@ -168,6 +170,24 @@ public class RobotContainer {
                 Commands.startEnd(m_drivetrainSubsystem::unlockRotation, m_drivetrainSubsystem::lockRotation),
                 new GatherCommand(m_wristSubsystem)
             ));
+
+        // Driver 2 controls
+        // 2 (thumb) - Take control and drive in a robot-relative manner with arm deployed. Parks arm when released.
+        // 1 (trigger) - Feed In (Doesn't automatically deploy arm)
+        // 3 - Feed in
+        // 5 - Feed out
+        new JoystickButton(m_controller2, 2).whileTrue(
+            Commands.parallel(
+                Commands.startEnd(m_drivetrainSubsystem::unlockRotation, m_drivetrainSubsystem::lockRotation),
+                Commands.startEnd(m_wristSubsystem::deploy, m_wristSubsystem::park, m_wristSubsystem),
+                robotRelativeDriveCommand
+            ));
+        
+        // Map buttons to feed balls in and out. Don't take control so that button 2 command is not ended.
+        new JoystickButton(m_controller2, 1).whileTrue(Commands.runEnd(m_wristSubsystem::feedIn, m_wristSubsystem::stopRoller));
+        new JoystickButton(m_controller2, 3).whileTrue(Commands.runEnd(m_wristSubsystem::feedIn, m_wristSubsystem::stopRoller));
+        new JoystickButton(m_controller2, 5).whileTrue(Commands.runEnd(m_wristSubsystem::feedOut, m_wristSubsystem::stopRoller));
+
         new JoystickButton(m_controller, 6)
             .onTrue(Commands.runOnce(m_drivetrainSubsystem::zeroGyroscope, m_drivetrainSubsystem));
 
