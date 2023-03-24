@@ -87,7 +87,7 @@ public class RobotContainer {
         // Left stick X axis -> left and right movement
         // Right stick X axis -> rotation
         m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(m_drivetrainSubsystem,
-                () -> poseEstimator.getCurrentPose().getRotation(),
+                true,
                 () -> modifyAxis(-m_controller.getRawAxis(1))
                         * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
                 () -> -modifyAxis(m_controller.getRawAxis(0))
@@ -154,6 +154,20 @@ public class RobotContainer {
 
         // https://docs.wpilib.org/en/stable/docs/software/commandbased/binding-commands-to-triggers.html
 
+        DefaultDriveCommand robotRelativeDriveCommand = new DefaultDriveCommand(m_drivetrainSubsystem,
+                false,
+                () -> modifyAxis(-m_controller.getRawAxis(1))
+                        * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+                () -> -modifyAxis(m_controller.getRawAxis(0))
+                        * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+                () -> -modifyTwistAxis(m_controller.getTwist())
+                        * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * m_drivetrainSubsystem.RotationLock * MAX_JOYSTICK_TWIST);
+
+        new JoystickButton(m_controller, 1).whileTrue(
+            Commands.parallel(
+                Commands.startEnd(m_drivetrainSubsystem::unlockRotation, m_drivetrainSubsystem::lockRotation),
+                new GatherCommand(m_wristSubsystem)
+            ));
         new JoystickButton(m_controller, 6)
             .onTrue(Commands.runOnce(m_drivetrainSubsystem::zeroGyroscope, m_drivetrainSubsystem));
 

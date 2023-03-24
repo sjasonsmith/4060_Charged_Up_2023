@@ -21,14 +21,17 @@ public class DefaultDriveCommand extends CommandBase {
     private SlewRateLimiter RateLimiter_Y;
     private SlewRateLimiter RateLimiter_R;
 
+    private Boolean m_fieldRelative;
+
     public DefaultDriveCommand(DrivetrainSubsystem drivetrainSubsystem,
-        Supplier<Rotation2d> robotAngleSupplier,
+        Boolean fieldRelative,
             DoubleSupplier translationXSupplier, DoubleSupplier translationYSupplier,
             DoubleSupplier rotationSupplier) {
         this.m_drivetrainSubsystem = drivetrainSubsystem;
         this.m_translationXSupplier = translationXSupplier;
         this.m_translationYSupplier = translationYSupplier;
         this.m_rotationSupplier = rotationSupplier;
+        this.m_fieldRelative = fieldRelative;
 
         addRequirements(drivetrainSubsystem);
 
@@ -46,8 +49,12 @@ public class DefaultDriveCommand extends CommandBase {
         double y = RateLimiter_Y.calculate(m_translationYSupplier.getAsDouble());
         double r = RateLimiter_R.calculate(m_rotationSupplier.getAsDouble());
 
-        m_drivetrainSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
-                x, y, r, m_drivetrainSubsystem.getGyroscopeRotation()));
+        if (m_fieldRelative) {
+            m_drivetrainSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
+                    x, y, r, m_drivetrainSubsystem.getGyroscopeRotation()));
+        } else {
+            m_drivetrainSubsystem.drive(new ChassisSpeeds(x, y, r));
+        }
     }
 
     @Override
