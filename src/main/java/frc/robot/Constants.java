@@ -31,12 +31,12 @@ public final class Constants {
     public static final int WRIST_MOTOR_CAN_ID = 14;
     public static final int ROLLER_MOTOR_CAN_ID = 15;
 
-    public static final double ROLLER_SPEED_DEPLOYED = 0.60;
-    public static final double ROLLER_SPEED_LEVEL1 = 0.65;
+    public static final double ROLLER_SPEED_DEPLOYED = 0.85;
+    public static final double ROLLER_SPEED_LEVEL1 = 0.85;
     public static final double ROLLER_SPEED_LEVEL2 = 0.85;
-    public static final double ROLLER_SPEED_LEVEL3 = 1.0;
+    public static final double ROLLER_SPEED_LEVEL3 = 0.85;
 
-    public static final float WRIST_PARK_POS = 5.0f;
+    public static final float WRIST_PARK_POS = 20.0f;
     public static final float WRIST_LEVEL1_POS = 20.0f;
     public static final float WRIST_LEVEL2_POS = 20.0f;
     // public static final float WRIST_LEVEL2_POS = 30.0f;
@@ -45,9 +45,9 @@ public final class Constants {
     public static final float WRIST_LEVEL3_POS = 20.0f;
     public static final float WRIST_DEPLOY_POS = 155.0f;
 
-    public static final double WRIST_P = 0.035;
-    public static final double WRIST_I = 0.00006;
-    public static final double WRIST_D = 0.01;
+    public static final double WRIST_P = 0.015;
+    public static final double WRIST_I = 0;//.00001;
+    public static final double WRIST_D = 1;//0.01;
 
     /**
      * The left-to-right distance between the drivetrain wheels

@@ -38,12 +38,12 @@ public class WristSubsystem extends SubsystemBase {
 
         wristPIDController = wristMotor.getPIDController();
         wristPIDController.setFeedbackDevice(wristEncoder);
-        wristPIDController.setOutputRange(-0.35, 0.35);
+        wristPIDController.setOutputRange(-1.0, 1.0);
         wristPIDController.setP(Constants.WRIST_P);
         wristPIDController.setI(Constants.WRIST_I);
         wristPIDController.setD(Constants.WRIST_D);
 
-        wristMotor.setClosedLoopRampRate(0.5);
+        wristMotor.setClosedLoopRampRate(0.2);
 
         wristMotor.setSoftLimit(SoftLimitDirection.kForward, Constants.WRIST_DEPLOY_POS - 10f);
         wristMotor.setSoftLimit(SoftLimitDirection.kReverse, Constants.WRIST_PARK_POS + 10f);
