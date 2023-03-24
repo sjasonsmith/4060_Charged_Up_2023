@@ -37,6 +37,7 @@ public class RobotContainer {
     private static final double side_DrivePastRamp = 200.00;
     private static final double MAX_JOYSTICK_TWIST_FIELD_RELATIVE = 0.25;
     private static final double MAX_JOYSTICK_TWIST_ROBOT_RELATIVE = 0.1;
+    private static final double MAX_JOYSTICK_TRANSLATE_ROBOT_RELATIVE = 0.5;
 
     // The robot's subsystems and commands are defined here...
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
@@ -160,11 +161,11 @@ public class RobotContainer {
         DefaultDriveCommand robotRelativeDriveCommand = new DefaultDriveCommand(m_drivetrainSubsystem,
                 false,
                 () -> modifyAxis(-m_controller2.getRawAxis(1))
-                        * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+                        * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND * MAX_JOYSTICK_TRANSLATE_ROBOT_RELATIVE,
                 () -> -modifyAxis(m_controller2.getRawAxis(0))
-                        * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+                        * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND * MAX_JOYSTICK_TRANSLATE_ROBOT_RELATIVE,
                 () -> -modifyTwistAxis(m_controller2.getTwist())
-                        * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * m_drivetrainSubsystem.RotationLock * MAX_JOYSTICK_TWIST_ROBOT   _RELATIVE);
+                        * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * m_drivetrainSubsystem.RotationLock * MAX_JOYSTICK_TWIST_ROBOT_RELATIVE);
 
         new JoystickButton(m_controller, 1).whileTrue(
             Commands.parallel(
