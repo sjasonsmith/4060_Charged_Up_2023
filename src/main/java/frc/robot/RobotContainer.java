@@ -35,7 +35,8 @@ public class RobotContainer {
     private static final double left_StrafeToRamp = -70.0;
     private static final double right_StrafeToRamp = -left_StrafeToRamp;
     private static final double side_DrivePastRamp = 200.00;
-    private static final double MAX_JOYSTICK_TWIST = 0.25;
+    private static final double MAX_JOYSTICK_TWIST_FIELD_RELATIVE = 0.25;
+    private static final double MAX_JOYSTICK_TWIST_ROBOT_RELATIVE = 0.1;
 
     // The robot's subsystems and commands are defined here...
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
@@ -95,7 +96,7 @@ public class RobotContainer {
                 () -> -modifyAxis(m_controller.getRawAxis(0))
                         * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
                 () -> -modifyTwistAxis(m_controller.getTwist())
-                        * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * m_drivetrainSubsystem.RotationLock * MAX_JOYSTICK_TWIST));
+                        * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * m_drivetrainSubsystem.RotationLock * MAX_JOYSTICK_TWIST_FIELD_RELATIVE));
 
         startingPose = poseEstimator.getCurrentPose();
 
@@ -163,7 +164,7 @@ public class RobotContainer {
                 () -> -modifyAxis(m_controller2.getRawAxis(0))
                         * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
                 () -> -modifyTwistAxis(m_controller2.getTwist())
-                        * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * m_drivetrainSubsystem.RotationLock * MAX_JOYSTICK_TWIST);
+                        * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * m_drivetrainSubsystem.RotationLock * MAX_JOYSTICK_TWIST_ROBOT   _RELATIVE);
 
         new JoystickButton(m_controller, 1).whileTrue(
             Commands.parallel(
