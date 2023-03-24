@@ -35,6 +35,7 @@ public class RobotContainer {
     private static final double left_StrafeToRamp = -70.0;
     private static final double right_StrafeToRamp = -left_StrafeToRamp;
     private static final double side_DrivePastRamp = 200.00;
+    private static final double MAX_JOYSTICK_TWIST = 0.25;
 
     // The robot's subsystems and commands are defined here...
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
@@ -92,7 +93,7 @@ public class RobotContainer {
                 () -> -modifyAxis(m_controller.getRawAxis(0))
                         * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
                 () -> -modifyTwistAxis(m_controller.getTwist())
-                        * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
+                        * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * m_drivetrainSubsystem.RotationLock * MAX_JOYSTICK_TWIST));
 
         startingPose = poseEstimator.getCurrentPose();
 
@@ -205,11 +206,19 @@ public class RobotContainer {
         new JoystickButton(m_controller, 10).onTrue(Commands.runOnce(m_wristSubsystem::level2, m_wristSubsystem));
         new JoystickButton(m_controller, 8).onTrue(Commands.runOnce(m_wristSubsystem::level3, m_wristSubsystem));
         
+        //unlock rotation
+        new JoystickButton(m_controller, 2).onTrue(Commands.runOnce(m_drivetrainSubsystem::unlockRotation));
+        new JoystickButton(m_controller, 2).onFalse(Commands.runOnce(m_drivetrainSubsystem::lockRotation));
+
         // Map buttons to feed balls in and out
         new JoystickButton(m_controller, 3).whileTrue(Commands.runEnd(m_wristSubsystem::feedIn, m_wristSubsystem::stopRoller, m_wristSubsystem));
         new JoystickButton(m_controller, 5).whileTrue(Commands.runEnd(m_wristSubsystem::feedOut, m_wristSubsystem::stopRoller, m_wristSubsystem));
         
-        new JoystickButton(m_controller, 1).whileTrue(new GatherCommand(m_wristSubsystem));
+        new JoystickButton(m_controller, 1).whileTrue(
+            Commands.runOnce(m_drivetrainSubsystem::unlockRotation)
+            .andThen(new GatherCommand(m_wristSubsystem))
+            .andThen(Commands.runOnce(m_drivetrainSubsystem::lockRotation)));
+
         new JoystickButton(m_controller, 7)
             .onTrue(Commands.runOnce(m_wristSubsystem::deploy, m_wristSubsystem)
                 .andThen(Commands.waitSeconds(1.75))

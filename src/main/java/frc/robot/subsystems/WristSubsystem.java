@@ -52,7 +52,7 @@ public class WristSubsystem extends SubsystemBase {
         wristEncoder.setPosition(0.0);
 
         rollerMotor.restoreFactoryDefaults();
-        rollerMotor.setInverted(true);
+        rollerMotor.setInverted(false);
         rollerMotor.setSmartCurrentLimit(30);
         rollerMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     }
@@ -62,19 +62,19 @@ public class WristSubsystem extends SubsystemBase {
     }
 
     public void runRollerIn(double speed) {
-        rollerMotor.set(speed);
-    }
-
-    public void runRollerOut(double speed) {
         rollerMotor.set(-speed);
     }
 
+    public void runRollerOut(double speed) {
+        rollerMotor.set(speed);
+    }
+
     public void feedIn() {
-        rollerMotor.set(-roller_speed_current);
+        rollerMotor.set(roller_speed_current);
     }
 
     public void feedOut() {
-        rollerMotor.set(roller_speed_current);
+        rollerMotor.set(-roller_speed_current);
     }
 
     public void stopRoller() {
