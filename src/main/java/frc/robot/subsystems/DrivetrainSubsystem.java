@@ -210,6 +210,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     }
 
+    // make a function to toggle rotation lock
+    public void toggleRotationLock(){
+
+        if (RotationLock == 0.0){
+
+            RotationLock = 1.0;
+
+        } else {
+
+            RotationLock = 0.0;
+
+        }
+
+    }
+    
+
     public Rotation2d getGyroscopeRotation() {
         // FIXME Remove if you are using a Pigeon
         // return Rotation2d.fromDegrees(m_pigeon.getFusedHeading());

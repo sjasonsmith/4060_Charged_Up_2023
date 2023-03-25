@@ -238,9 +238,8 @@ public class RobotContainer {
         new JoystickButton(m_controller, 10).onTrue(Commands.runOnce(m_wristSubsystem::level2, m_wristSubsystem));
         new JoystickButton(m_controller, 8).onTrue(Commands.runOnce(m_wristSubsystem::level3, m_wristSubsystem));
         
-        //unlock rotation
-        new JoystickButton(m_controller, 2).onTrue(Commands.runOnce(m_drivetrainSubsystem::unlockRotation));
-        new JoystickButton(m_controller, 2).onFalse(Commands.runOnce(m_drivetrainSubsystem::lockRotation));
+        // on button 2 true, toggle rotation lock
+        new JoystickButton(m_controller, 2).onTrue(Commands.runOnce(m_drivetrainSubsystem::toggleRotationLock));
 
         // Map buttons to feed balls in and out
         new JoystickButton(m_controller, 3).whileTrue(Commands.runEnd(m_wristSubsystem::feedIn, m_wristSubsystem::stopRoller, m_wristSubsystem));
