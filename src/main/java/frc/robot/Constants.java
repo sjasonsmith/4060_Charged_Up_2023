@@ -83,7 +83,7 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 7;
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 13;
     // public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(0.0);
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(164.7);
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(168.7);
 
     // This motor is probably not Loctited...but we can't get the magnet out.
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 8;
