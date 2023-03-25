@@ -30,7 +30,7 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
 
-    private static final double center_DriverOverRamp_inches = 250.0;
+    private static final double center_DriverOverRamp_inches = 240.0;
     private static final double center_DriveToRamp_inches = 80.0;
     private static final double left_StrafeToRamp = -70.0;
     private static final double right_StrafeToRamp = -left_StrafeToRamp;
@@ -114,7 +114,7 @@ public class RobotContainer {
                 EjectCubeCommand()
                 .andThen(GoToInches_ExitOnRoll(center_DriveToRamp_inches, 0.0))
                 .andThen(GoToInches(center_DriverOverRamp_inches, 0.0))
-                .andThen(GoToInches_ExitOnRoll(center_DriveToRamp_inches, 0.0))
+                .andThen(GoToInches_ExitOnRoll(center_DriveToRamp_inches - 20, 0.0))
                 .andThen(new AutoBalanceCommand(m_drivetrainSubsystem)));
 
         m_chooser.addOption("Left: Drive Out",
