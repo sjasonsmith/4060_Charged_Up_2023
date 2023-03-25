@@ -186,8 +186,8 @@ public class RobotContainer {
         new JoystickButton(m_controller2, 3).whileTrue(Commands.runEnd(m_wristSubsystem::feedIn, m_wristSubsystem::stopRoller));
         new JoystickButton(m_controller2, 5).whileTrue(Commands.runEnd(m_wristSubsystem::feedOut, m_wristSubsystem::stopRoller));
 
-        new JoystickButton(m_controller, 11).whileTrue(new RotateToHeadingCommand(m_drivetrainSubsystem, poseEstimator, 0.0, false));
-        new JoystickButton(m_controller, 12).whileTrue(new RotateToHeadingCommand(m_drivetrainSubsystem, poseEstimator, 180.0, false));
+        new JoystickButton(m_controller2, 11).whileTrue(new RotateToHeadingCommand(m_drivetrainSubsystem, poseEstimator, 0.0, false));
+        new JoystickButton(m_controller2, 12).whileTrue(new RotateToHeadingCommand(m_drivetrainSubsystem, poseEstimator, 180.0, false));
 
         new JoystickButton(m_controller, 6)
             .onTrue(Commands.runOnce(m_drivetrainSubsystem::zeroGyroscope, m_drivetrainSubsystem));
