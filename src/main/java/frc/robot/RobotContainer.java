@@ -10,17 +10,16 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -29,7 +28,7 @@ import frc.robot.subsystems.*;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-
+    // Use joysticks if true, else use a gamepad
     private static final double center_DriverOverRamp_inches = 240.0;
     private static final double center_DriveToRamp_inches = 80.0;
     private static final double left_StrafeToRamp = -70.0;
@@ -42,8 +41,9 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
 
-    private final Joystick m_controller = new Joystick(0);
-    private final Joystick m_controller2 = new Joystick(1);
+    //private final Joystick m_controller = new Joystick(0);
+    //private final Joystick m_controller2 = new Joystick(1);
+    private final CommandXboxController m_controller = new CommandXboxController(0);
 
     private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(m_drivetrainSubsystem);
 
@@ -92,11 +92,11 @@ public class RobotContainer {
         // Right stick X axis -> rotation
         m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(m_drivetrainSubsystem,
                 true,
-                () -> modifyAxis(-m_controller.getRawAxis(1))
+                () -> modifyAxis(-m_controller.getLeftY())
                         * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-                () -> -modifyAxis(m_controller.getRawAxis(0))
+                () -> -modifyAxis(m_controller.getLeftX())
                         * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-                () -> -modifyTwistAxis(m_controller.getTwist())
+                () -> -modifyTwistAxis(m_controller.getRightX())
                         * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * m_drivetrainSubsystem.RotationLock * MAX_JOYSTICK_TWIST_FIELD_RELATIVE));
 
         startingPose = poseEstimator.getCurrentPose();
@@ -156,16 +156,17 @@ public class RobotContainer {
 
         // https://docs.wpilib.org/en/stable/docs/software/commandbased/binding-commands-to-triggers.html
 
-        DefaultDriveCommand robotRelativeDriveCommand = new DefaultDriveCommand(m_drivetrainSubsystem,
-                false,
-                () -> modifyAxis(-m_controller2.getRawAxis(1))
-                        * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND * MAX_JOYSTICK_TRANSLATE_ROBOT_RELATIVE,
-                () -> -modifyAxis(m_controller2.getRawAxis(0))
-                        * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND * MAX_JOYSTICK_TRANSLATE_ROBOT_RELATIVE,
-                () -> -modifyTwistAxis(m_controller2.getTwist())
-                        * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * m_drivetrainSubsystem.RotationLock * MAX_JOYSTICK_TWIST_ROBOT_RELATIVE);
+        // DefaultDriveCommand robotRelativeDriveCommand = new DefaultDriveCommand(m_drivetrainSubsystem,
+        //         false,
+        //         () -> modifyAxis(-m_controller2.getRawAxis(1))
+        //                 * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND * MAX_JOYSTICK_TRANSLATE_ROBOT_RELATIVE,
+        //         () -> -modifyAxis(m_controller2.getRawAxis(0))
+        //                 * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND * MAX_JOYSTICK_TRANSLATE_ROBOT_RELATIVE,
+        //         () -> -modifyTwistAxis(m_controller2.getTwist())
+        //                 * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * m_drivetrainSubsystem.RotationLock * MAX_JOYSTICK_TWIST_ROBOT_RELATIVE);
 
-        new JoystickButton(m_controller, 1).whileTrue(
+        // Run a command while the left bumper is held
+        m_controller.leftBumper().whileTrue(
             Commands.parallel(
                 Commands.startEnd(m_drivetrainSubsystem::unlockRotation, m_drivetrainSubsystem::lockRotation),
                 new GatherCommand(m_wristSubsystem)
@@ -175,22 +176,22 @@ public class RobotContainer {
         // 1 (trigger) - Take control and drive in a robot-relative manner with arm deployed. Parks arm when released.
         // 3 - Feed in
         // 5 - Feed out
-        new JoystickButton(m_controller2, 1).whileTrue(
-            Commands.parallel(
-                Commands.startEnd(m_drivetrainSubsystem::unlockRotation, m_drivetrainSubsystem::lockRotation),
-                Commands.startEnd(m_wristSubsystem::deploy, m_wristSubsystem::park, m_wristSubsystem),
-                robotRelativeDriveCommand
-            ));
+        // new JoystickButton(m_controller2, 1).whileTrue(
+        //     Commands.parallel(
+        //         Commands.startEnd(m_drivetrainSubsystem::unlockRotation, m_drivetrainSubsystem::lockRotation),
+        //         Commands.startEnd(m_wristSubsystem::deploy, m_wristSubsystem::park, m_wristSubsystem),
+        //         robotRelativeDriveCommand
+        //     ));
         
         // Map buttons to feed balls in and out. Don't take control so that button 2 command is not ended.
-        new JoystickButton(m_controller2, 3).whileTrue(Commands.runEnd(m_wristSubsystem::feedIn, m_wristSubsystem::stopRoller));
-        new JoystickButton(m_controller2, 5).whileTrue(Commands.runEnd(m_wristSubsystem::feedOut, m_wristSubsystem::stopRoller));
+        // new JoystickButton(m_controller2, 3).whileTrue(Commands.runEnd(m_wristSubsystem::feedIn, m_wristSubsystem::stopRoller));
+        // new JoystickButton(m_controller2, 5).whileTrue(Commands.runEnd(m_wristSubsystem::feedOut, m_wristSubsystem::stopRoller));
 
-        new JoystickButton(m_controller2, 11).whileTrue(new RotateToHeadingCommand(m_drivetrainSubsystem, poseEstimator, 0.0, false));
-        new JoystickButton(m_controller2, 12).whileTrue(new RotateToHeadingCommand(m_drivetrainSubsystem, poseEstimator, 180.0, false));
+        // new JoystickButton(m_controller2, 11).whileTrue(new RotateToHeadingCommand(m_drivetrainSubsystem, poseEstimator, 0.0, false));
+        // new JoystickButton(m_controller2, 12).whileTrue(new RotateToHeadingCommand(m_drivetrainSubsystem, poseEstimator, 180.0, false));
 
-        new JoystickButton(m_controller, 6)
-            .onTrue(Commands.runOnce(m_drivetrainSubsystem::zeroGyroscope, m_drivetrainSubsystem));
+        // new JoystickButton(m_controller, 6)
+        //     .onTrue(Commands.runOnce(m_drivetrainSubsystem::zeroGyroscope, m_drivetrainSubsystem));
 
         // new JoystickButton(m_controller, 4)
         //     .onTrue(new PrintPositionCommand(poseEstimator));
@@ -225,7 +226,7 @@ public class RobotContainer {
         // new JoystickButton(m_controller, 11).onTrue(GoToInches(48, 48));
         // new JoystickButton(m_controller, 12).onTrue(GoToInches(24, 48));
 
-        new JoystickButton(m_controller, 9).whileTrue(new AutoBalanceCommand(m_drivetrainSubsystem));
+        m_controller.y().whileTrue(new AutoBalanceCommand(m_drivetrainSubsystem));
         // new JoystickButton(m_controller, 5).whileTrue(new AlignToCubeChannelCommand(m_drivetrainSubsystem, poseEstimator));
 
         // new JoystickButton(m_controller, 6).onTrue(Commands.runOnce(m_cubeFlipperSubsystem::eject, m_cubeFlipperSubsystem));
@@ -235,32 +236,32 @@ public class RobotContainer {
         //     drivetrainSubsystem, poseEstimator::getCurrentPose, new Pose2d(14.59, 1.67, Rotation2d.fromDegrees(0.0)))
         //         .andThen(new JustShootCommand(0.4064, 1.05, 34.5, elevatorSubsystem, wristSubsystem, shooterSubsystem)));
 
-        new JoystickButton(m_controller, 11).onTrue(Commands.runOnce(m_wristSubsystem::park, m_wristSubsystem));
-        new JoystickButton(m_controller, 9).onTrue(Commands.runOnce(m_wristSubsystem::deploy, m_wristSubsystem));
-        new JoystickButton(m_controller, 12).onTrue(Commands.runOnce(m_wristSubsystem::level1, m_wristSubsystem));
-        new JoystickButton(m_controller, 10).onTrue(Commands.runOnce(m_wristSubsystem::level2, m_wristSubsystem));
-        new JoystickButton(m_controller, 8).onTrue(Commands.runOnce(m_wristSubsystem::level3, m_wristSubsystem));
+        // new JoystickButton(m_controller, 11).onTrue(Commands.runOnce(m_wristSubsystem::park, m_wristSubsystem));
+        // new JoystickButton(m_controller, 9).onTrue(Commands.runOnce(m_wristSubsystem::deploy, m_wristSubsystem));
+        // new JoystickButton(m_controller, 12).onTrue(Commands.runOnce(m_wristSubsystem::level1, m_wristSubsystem));
+        // new JoystickButton(m_controller, 10).onTrue(Commands.runOnce(m_wristSubsystem::level2, m_wristSubsystem));
+        // new JoystickButton(m_controller, 8).onTrue(Commands.runOnce(m_wristSubsystem::level3, m_wristSubsystem));
         
-        // on button 2 true, toggle rotation lock
-        new JoystickButton(m_controller, 2).onTrue(Commands.runOnce(m_drivetrainSubsystem::toggleRotationLock));
+        // // on button 2 true, toggle rotation lock
+        // new JoystickButton(m_controller, 2).onTrue(Commands.runOnce(m_drivetrainSubsystem::toggleRotationLock));
 
-        // Map buttons to feed balls in and out
-        new JoystickButton(m_controller, 3).whileTrue(Commands.runEnd(m_wristSubsystem::feedIn, m_wristSubsystem::stopRoller, m_wristSubsystem));
-        new JoystickButton(m_controller, 5).whileTrue(Commands.runEnd(m_wristSubsystem::feedOut, m_wristSubsystem::stopRoller, m_wristSubsystem));
+        // // Map buttons to feed balls in and out
+        // new JoystickButton(m_controller, 3).whileTrue(Commands.runEnd(m_wristSubsystem::feedIn, m_wristSubsystem::stopRoller, m_wristSubsystem));
+        // new JoystickButton(m_controller, 5).whileTrue(Commands.runEnd(m_wristSubsystem::feedOut, m_wristSubsystem::stopRoller, m_wristSubsystem));
         
-        new JoystickButton(m_controller, 1).whileTrue(
-            Commands.runOnce(m_drivetrainSubsystem::unlockRotation)
-            .andThen(new GatherCommand(m_wristSubsystem))
-            .andThen(Commands.runOnce(m_drivetrainSubsystem::lockRotation)));
+        // new JoystickButton(m_controller, 1).whileTrue(
+        //     Commands.runOnce(m_drivetrainSubsystem::unlockRotation)
+        //     .andThen(new GatherCommand(m_wristSubsystem))
+        //     .andThen(Commands.runOnce(m_drivetrainSubsystem::lockRotation)));
 
-        new JoystickButton(m_controller, 7)
-            .onTrue(Commands.runOnce(m_wristSubsystem::deploy, m_wristSubsystem)
-                .andThen(Commands.waitSeconds(0.75))
-                .andThen(Commands.runOnce(m_wristSubsystem::feedOut, m_wristSubsystem))
-                .andThen(Commands.waitSeconds(0.5))
-                .andThen(Commands.runOnce(m_wristSubsystem::park, m_wristSubsystem))
-                .andThen(Commands.waitSeconds(0.5))
-                .andThen(Commands.runOnce(m_wristSubsystem::stopRoller, m_wristSubsystem)));
+        // new JoystickButton(m_controller, 7)
+        //     .onTrue(Commands.runOnce(m_wristSubsystem::deploy, m_wristSubsystem)
+        //         .andThen(Commands.waitSeconds(0.75))
+        //         .andThen(Commands.runOnce(m_wristSubsystem::feedOut, m_wristSubsystem))
+        //         .andThen(Commands.waitSeconds(0.5))
+        //         .andThen(Commands.runOnce(m_wristSubsystem::park, m_wristSubsystem))
+        //         .andThen(Commands.waitSeconds(0.5))
+        //         .andThen(Commands.runOnce(m_wristSubsystem::stopRoller, m_wristSubsystem)));
     }
 
     /**s
