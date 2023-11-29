@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.Robot;
+import edu.wpi.first.wpilibj.Solenoid;
 
 
 /**
@@ -227,6 +229,14 @@ public class RobotContainer {
         // new JoystickButton(m_controller, 12).onTrue(GoToInches(24, 48));
 
         m_controller.y().whileTrue(new AutoBalanceCommand(m_drivetrainSubsystem));
+
+        // When the A button is pressed, toggle both Robot::m_clawSolenoidA and Robot::m_clawSolenoidB
+        m_controller.a().onTrue(
+            Commands.parallel(
+                Commands.runOnce(Robot.m_clawSolenoidA::toggle),
+                Commands.runOnce(Robot.m_clawSolenoidB::toggle)
+            ));    
+
         // new JoystickButton(m_controller, 5).whileTrue(new AlignToCubeChannelCommand(m_drivetrainSubsystem, poseEstimator));
 
         // new JoystickButton(m_controller, 6).onTrue(Commands.runOnce(m_cubeFlipperSubsystem::eject, m_cubeFlipperSubsystem));

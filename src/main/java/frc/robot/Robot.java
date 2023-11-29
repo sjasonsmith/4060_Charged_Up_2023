@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 
 
 /**
@@ -26,6 +28,11 @@ public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
+
+    // Add a copressor
+    private Compressor m_compressor;
+    public static Solenoid m_clawSolenoidA = new Solenoid(Constants.PNEUMATICS_CONTROL_MODULE_ID, PneumaticsModuleType.CTREPCM, Constants.CLAW_SOLENOID_CHANNEL_A);
+    public static  Solenoid m_clawSolenoidB = new Solenoid(Constants.PNEUMATICS_CONTROL_MODULE_ID, PneumaticsModuleType.CTREPCM, Constants.CLAW_SOLENOID_CHANNEL_B);
 
     
 
@@ -49,6 +56,13 @@ public class Robot extends TimedRobot {
         //CameraServer.startAutomaticCapture(new HttpCamera("limelight",
         //        "http://10.40.60.12:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer));
         //SmartDashboard.putData("Field", m_fieldSim);
+
+        m_compressor = new Compressor(Constants.PNEUMATICS_CONTROL_MODULE_ID, PneumaticsModuleType.CTREPCM);
+        m_compressor.enableDigital();
+        // m_clawSolenoidA = new Solenoid(Constants.PNEUMATICS_CONTROL_MODULE_ID, PneumaticsModuleType.CTREPCM, Constants.CLAW_SOLENOID_CHANNEL_A);
+        // m_clawSolenoidB = new Solenoid(Constants.PNEUMATICS_CONTROL_MODULE_ID, PneumaticsModuleType.CTREPCM, Constants.CLAW_SOLENOID_CHANNEL_B);
+        m_clawSolenoidA.set(false);
+        m_clawSolenoidB.set(true);
     }
 
     /**
