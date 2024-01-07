@@ -8,13 +8,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 /**
  * Command to drive to a pose.
  */
-public class DriveToPoseCommand extends CommandBase {
+public class DriveToPoseCommand extends Command {
   
   private static final double TRANSLATION_TOLERANCE = Units.inchesToMeters(6.0);
   private static final double THETA_TOLERANCE = Units.degreesToRadians(5.0);

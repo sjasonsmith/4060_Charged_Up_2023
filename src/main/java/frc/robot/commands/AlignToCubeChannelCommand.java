@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -9,15 +10,16 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 /**
  * Command to drive to the closest Cube Dropoff point.
  */
-public class AlignToCubeChannelCommand extends CommandBase {
+public class AlignToCubeChannelCommand extends Command {
 
     private static final double TRANSLATION_TOLERANCE = 0.1;
     private static final double THETA_TOLERANCE = Units.degreesToRadians(0.5);
@@ -53,8 +55,8 @@ public class AlignToCubeChannelCommand extends CommandBase {
     Rotation2d direction = Rotation2d.fromDegrees(0); // Default facing RED side
     if (DriverStation.isFMSAttached() || DriverStation.isTest() == false){
         // This is a real game, so we will trust the FMS
-        var alliance = DriverStation.getAlliance();
-        if (alliance == DriverStation.Alliance.Blue){
+        Optional<Alliance> alliance = DriverStation.getAlliance();
+        if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Blue){
             direction = Rotation2d.fromDegrees(-180.00); //facing BLUE side
         }
     } else {

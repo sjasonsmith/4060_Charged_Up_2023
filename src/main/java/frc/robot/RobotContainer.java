@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.*;
@@ -53,7 +53,7 @@ public class RobotContainer {
     
     private final WristSubsystem m_wristSubsystem = new WristSubsystem();
 
-    private CommandBase EjectCubeCommand() {
+    private Command EjectCubeCommand() {
         return Commands.runOnce(m_cubeFlipperSubsystem::eject, m_cubeFlipperSubsystem)
             .andThen(Commands.waitSeconds(Constants.CUBE_FLIPPER_EJECT_DELAY_S))
             .andThen(Commands.runOnce(m_cubeFlipperSubsystem::park, m_cubeFlipperSubsystem));

@@ -9,13 +9,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 /**
  * Command to drive to a pose.
  */
-public class PrintPositionCommand extends CommandBase {
+public class PrintPositionCommand extends Command {
   
 
   private final Supplier<Pose2d> poseProvider;

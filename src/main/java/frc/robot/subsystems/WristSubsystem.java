@@ -1,11 +1,10 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.*;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.SparkMaxRelativeEncoder;
-import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.SparkRelativeEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -15,7 +14,7 @@ public class WristSubsystem extends SubsystemBase {
     private CANSparkMax rollerMotor = new CANSparkMax(Constants.ROLLER_MOTOR_CAN_ID, CANSparkMax.MotorType.kBrushed);
 
     private RelativeEncoder wristEncoder;
-    private SparkMaxPIDController wristPIDController;
+    private SparkPIDController wristPIDController;
 
     private double roller_speed_deployed() { return SmartDashboard.getNumber("roller_speed_deployed", Constants.ROLLER_SPEED_DEPLOYED); }
     private double roller_speed_level1() { return SmartDashboard.getNumber("roller_speed_level1", Constants.ROLLER_SPEED_LEVEL1); }
@@ -33,7 +32,7 @@ public class WristSubsystem extends SubsystemBase {
         // wristMotor.setOpenLoopRampRate(1.0);
         // wristMotor.setClosedLoopRampRate(1.0);
         // Set closed loop to position mode
-        wristEncoder = wristMotor.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 8192);
+        wristEncoder = wristMotor.getEncoder(SparkRelativeEncoder.Type.kQuadrature, 8192);
         wristEncoder.setPositionConversionFactor(360.0);
 
         wristPIDController = wristMotor.getPIDController();
